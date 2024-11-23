@@ -1,12 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rekap Gas Adsense</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
 </head>
 <body>
-    <h1>Halo guys</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Rekap Gas Adsense</h1>
+            <div class="account-selector">
+                <select id="accountSelector">
+                    <option value="">Pilih Akun Adsense</option>
+                </select>
+                <button class="btn" onclick="showAddAccountModal()">+ Tambah Akun</button>
+            </div>
+        </div>
+
+        <!-- Stats Summary Section -->
+        <div class="data-display">
+            <div class="stat-card">
+                <h3>Total Modal</h3>
+                <p id="totalCosts">Rp 0</p>
+                <small class="stat-label">Total biaya iklan + biaya lain</small>
+            </div>
+            <div class="stat-card">
+                <h3>Estimasi Pajak</h3>
+                <p id="taxEstimate">Rp 0</p>
+                <small class="stat-label">11% dari total modal</small>
+            </div>
+            <div class="stat-card">
+                <h3>Total Pendapatan</h3>
+                <p id="totalRevenue">Rp 0</p>
+                <small class="stat-label">Total pendapatan kotor</small>
+            </div>
+            <div class="stat-card">
+                <h3>Profit Bersih</h3>
+                <p id="netProfit">Rp 0</p>
+                <small class="stat-label">Pendapatan - (Modal Iklan + Biaya Lain + Pajak)</small>
+            </div>
+            <div class="stat-card">
+                <h3>Profit Rate</h3>
+                <p id="profitRate">0%</p>
+                <small class="stat-label">Persentase profit bersih</small>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-card">
+                <h3>Grafik Performa</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Profit Rate Harian</h3>
+                <canvas id="profitRateChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Input Form Section -->
+        <div class="form-section">
+            <h2>Input Data Harian</h2>
+            <form id="adsForm">
+                <div class="form-group">
+                    <label for="date">Tanggal</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="adSpend">Modal Iklan (Rp)</label>
+                    <input type="text" id="adSpend" placeholder="0,00" required>
+                </div>
+                <div class="form-group">
+                    <label for="revenue">Pendapatan (Rp)</label>
+                    <input type="text" id="revenue" placeholder="0,00" required>
+                </div>
+                <div class="form-group">
+                    <label for="otherCosts">Biaya Lain (Rp)</label>
+                    <input type="text" id="otherCosts" placeholder="0,00">
+                </div>
+                <div class="form-group">
+                    <label for="notes">Catatan</label>
+                    <textarea id="notes" placeholder="Tambahkan catatan (opsional)..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Simpan Data</button>
+                    <button type="button" class="btn export-btn" onclick="exportData()">Export Data</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Data Table Section -->
+        <div class="table-container">
+            <h2>Riwayat Data</h2>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Modal Iklan</th>
+                        <th>Biaya Lain</th>
+                        <th>Pajak</th>
+                        <th>Pendapatan</th>
+                        <th>Profit</th>
+                        <th>Profit Rate</th>
+                        <th>Catatan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Akun -->
+    <div id="addAccountModal" class="modal">
+        <div class="modal-content">
+            <h2>Tambah Akun Adsense Baru</h2>
+            <form id="addAccountForm">
+                <div class="form-group">
+                    <label for="accountName">Nama Akun</label>
+                    <input type="text" id="accountName" required placeholder="Masukkan nama akun">
+                </div>
+                <div class="form-group">
+                    <label for="accountDescription">Deskripsi (Opsional)</label>
+                    <textarea id="accountDescription" placeholder="Tambahkan deskripsi akun..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn">Simpan</button>
+                    <button type="button" class="btn cancel" onclick="closeAddAccountModal()">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="utils.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
